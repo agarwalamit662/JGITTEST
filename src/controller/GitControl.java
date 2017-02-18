@@ -40,16 +40,18 @@ public class GitControl {
     private CredentialsProvider cp;
     private String username;
     private String password;
-
-    public GitControl(String localPath, String remotePath,String username,String password) throws IOException, RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
+    private String branch;
+    
+    public GitControl(String localPath, String remotePath,String username,String password,String branch) throws IOException, RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
         this.localPath = localPath;
         this.remotePath = remotePath;
         this.username = username;
         this.password = password;
         this.localRepo = new FileRepository(localPath + "/.git");
+        this.branch = branch;
         cp = new UsernamePasswordCredentialsProvider(this.username, this.password);
         git = new Git(localRepo);
-        git.checkout().setName("my_first_branch").call();
+        git.checkout().setName(null != this.branch && !this.branch.trim().isEmpty()?this.branch: "master" ).call();
     }
 
     public void cloneRepo() throws IOException, NoFilepatternException, GitAPIException {
