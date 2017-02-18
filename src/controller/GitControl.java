@@ -7,15 +7,18 @@ import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.CanceledException;
+import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.DetachedHeadException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidConfigurationException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.NoMessageException;
+import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
 import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
@@ -38,7 +41,7 @@ public class GitControl {
     private String username;
     private String password;
 
-    public GitControl(String localPath, String remotePath,String username,String password) throws IOException {
+    public GitControl(String localPath, String remotePath,String username,String password) throws IOException, RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
         this.localPath = localPath;
         this.remotePath = remotePath;
         this.username = username;
@@ -46,6 +49,7 @@ public class GitControl {
         this.localRepo = new FileRepository(localPath + "/.git");
         cp = new UsernamePasswordCredentialsProvider(this.username, this.password);
         git = new Git(localRepo);
+        git.checkout().setName("my_first_branch").call();
     }
 
     public void cloneRepo() throws IOException, NoFilepatternException, GitAPIException {
