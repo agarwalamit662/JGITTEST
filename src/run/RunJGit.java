@@ -2,12 +2,13 @@ package run;
 
 import java.io.IOException;
 import java.util.Scanner;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
-
 import controller.GitControl;
-
 public class RunJGit {
+
+	private RunJGit() {
+		super();
+	}
 
 	public static void main(String[] args) throws IOException, GitAPIException {
 		
@@ -27,20 +28,16 @@ public class RunJGit {
 		System.out.println("Enter Commit Message");
 		String commitMessage = sc.nextLine();
 		
-		//String localPath = "C:/JGITTEST/JGITTEST";
-        String remotePath = "ABC.COM";
+		String remotePath = "REMOTE PATH IS NEEDED TO CLONE REPOSITORY";
         GitControl gc = new GitControl(localPath, remotePath,username,password,branch);
         //Clone repository
-        //gc.cloneRepo();
         //Add files to repository
         gc.addToRepo();
         //Commit with a custom message
         gc.commitToRepo(commitMessage);
         //Push commits
         gc.pushToRepo();
-        //Pull
-       // gc.pullFromRepo();
-		
+       
 	}
 
 }
